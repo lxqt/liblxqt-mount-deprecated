@@ -25,11 +25,13 @@
  *
  * END_COMMON_COPYRIGHT_HEADER */
 
-#include "razormount.h"
+#include "lxqtmount.h"
 #include "rzmountproviders.h"
 #include <QtCore/QDebug>
 
-RazorMountDevice::RazorMountDevice():
+namespace LxQt {
+
+MountDevice::MountDevice():
     QObject(0),
     mIsValid(false),
     mIsExternal(false),
@@ -38,7 +40,7 @@ RazorMountDevice::RazorMountDevice():
 {
 }
 
-QString RazorMountDevice::sizeToString(qulonglong size)
+QString MountDevice::sizeToString(qulonglong size)
 {
     double n;
     n = size / (1024.0 * 1024 * 1024);
@@ -57,7 +59,7 @@ QString RazorMountDevice::sizeToString(qulonglong size)
 }
 
 
-RazorMountManager::RazorMountManager(QObject *parent):
+MountManager::MountManager(QObject *parent):
     QObject(parent),
     mProvider(0)
 {
@@ -81,59 +83,60 @@ RazorMountManager::RazorMountManager(QObject *parent):
 
     update();
 
-    connect(mProvider, SIGNAL(deviceAdded(RazorMountDevice*)),
-                 this, SIGNAL(deviceAdded(RazorMountDevice*)));
+    connect(mProvider, SIGNAL(deviceAdded(MountDevice*)),
+                 this, SIGNAL(deviceAdded(MountDevice*)));
 
-    connect(mProvider, SIGNAL(deviceChanged(RazorMountDevice*)),
-                 this, SIGNAL(deviceChanged(RazorMountDevice*)));
+    connect(mProvider, SIGNAL(deviceChanged(MountDevice*)),
+                 this, SIGNAL(deviceChanged(MountDevice*)));
 
-    connect(mProvider, SIGNAL(deviceRemoved(RazorMountDevice*)),
-                 this, SIGNAL(deviceRemoved(RazorMountDevice*)));
+    connect(mProvider, SIGNAL(deviceRemoved(MountDevice*)),
+                 this, SIGNAL(deviceRemoved(MountDevice*)));
 }
 
 
-RazorMountManager::~RazorMountManager()
+MountManager::~MountManager()
 {
     delete mProvider;
 }
 
 
-void RazorMountManager::update()
+void MountManager::update()
 {
     if (mProvider)
         mProvider->update();
     else
-        qDebug() << "RazorMountDeviceList RazorMountManager::update() no valid provider in use";
+        qDebug() << "MountDeviceList MountManager::update() no valid provider in use";
 
 }
 
 
-const RazorMountDeviceList RazorMountManager::devices() const
+const MountDeviceList MountManager::devices() const
 {
     if (mProvider)
     {
-        //qDebug() << "RazorMountManager::devices" << mProvider->devices();
+        //qDebug() << "MountManager::devices" << mProvider->devices();
         return mProvider->devices();
     }
     else
     {
-        qWarning() << "RazorMountDeviceList RazorMountManager::devices() no valid provider in use";
-        return RazorMountDeviceList();
+        qWarning() << "MountDeviceList MountManager::devices() no valid provider in use";
+        return MountDeviceList();
     }
 }
 
+} // namespace LxQt
 
-QDebug operator<<(QDebug dbg, const RazorMountDevice &device)
+QDebug operator<<(QDebug dbg, const LxQt::MountDevice &device)
 {
     dbg << device.devFile();
 
     switch (device.mediaType())
     {
-    case RazorMountDevice::MediaTypeUnknown:    dbg<<"Type: MediaTypeUnknown";  break;
-    case RazorMountDevice::MediaTypeDrive:      dbg<<"Type: MediaTypeDrive";    break;
-    case RazorMountDevice::MediaTypePartition:  dbg<<"Type: MediaTypePartition";break;
-    case RazorMountDevice::MediaTypeFdd:        dbg<<"Type: MediaTypeFdd";      break;
-    case RazorMountDevice::MediaTypeOptical:    dbg<<"Type: MediaTypeOptical";  break;
+    case LxQt::MountDevice::MediaTypeUnknown:    dbg<<"Type: MediaTypeUnknown";  break;
+    case LxQt::MountDevice::MediaTypeDrive:      dbg<<"Type: MediaTypeDrive";    break;
+    case LxQt::MountDevice::MediaTypePartition:  dbg<<"Type: MediaTypePartition";break;
+    case LxQt::MountDevice::MediaTypeFdd:        dbg<<"Type: MediaTypeFdd";      break;
+    case LxQt::MountDevice::MediaTypeOptical:    dbg<<"Type: MediaTypeOptical";  break;
     default:                                    dbg<<"Type: "<<device.mediaType();break;
     }
     dbg << "Label: " << device.label();
@@ -142,7 +145,7 @@ QDebug operator<<(QDebug dbg, const RazorMountDevice &device)
 }
 
 
-QDebug operator<<(QDebug dbg, const RazorMountDevice *device)
+QDebug operator<<(QDebug dbg, const LxQt::MountDevice *device)
 {
     return operator<<(dbg, *device);
 }

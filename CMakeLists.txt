@@ -1,44 +1,56 @@
+cmake_minimum_required(VERSION 2.6)
+# additional cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
+find_package(X11 REQUIRED QUIET)
+
+find_package(LXQT REQUIRED)
+include(${LXQT_USE_FILE})
 
 include_directories (
 	${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
     ${QT_INCLUDES}
 	${X11_INCLUDE_DIR}
-	.
+	${LXQT_INCLUDE_DIRS}
 )
 
-set(razormount_HDRS
-    razormount.h
+set(lxqtmount_HDRS
+    lxqtmount.h
     rzmountproviders.h
 )
 
-set(razormount_SRCS
-    razormount.cpp
+set(lxqtmount_SRCS
+    lxqtmount.cpp
     rzmountproviders.cpp
     rzmountproviders_udisks2.cpp
 )
 
-set(razormount_MOCS
-    razormount.h
+set(lxqtmount_MOCS
+    lxqtmount.h
     rzmountproviders.h
 )
 
-QT4_WRAP_CPP(razourmount_MOCS ${razormount_MOCS})
+QT4_WRAP_CPP(razourmount_MOCS ${lxqtmount_MOCS})
 
 
-add_library ( razormount SHARED ${razormount_SRCS} ${razourmount_MOCS} )
+add_library ( lxqtmount SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS} )
 
-target_link_libraries ( razormount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
+target_link_libraries ( lxqtmount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${QT_QTDBUS_LIBRARY}
 				 ${UDEV_LIBRARIES} 
+				 ${LXQT_LIBRARIES}
                       )
 
-set_target_properties(razormount PROPERTIES
-  VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}
-  SOVERSION ${MAJOR_VERSION}
+set_target_properties(lxqtmount PROPERTIES
+  VERSION ${LXQT_VERSION}
+  SOVERSION ${LXQT_MAJOR_VERSION}
 )
 
-install(TARGETS razormount DESTINATION lib${LIB_SUFFIX})
-install(FILES ${razormount_HDRS} DESTINATION include/razormount)
+install(TARGETS lxqtmount DESTINATION lib${LIB_SUFFIX})
+install(FILES ${lxqtmount_HDRS} DESTINATION include/lxqtmount)
 
 include(create_pkgconfig_file)
-create_pkgconfig_file(razormount "Razor-qt library for removable media/devices")
+create_pkgconfig_file(lxqtmount "lxde-qt library for removable media/devices")

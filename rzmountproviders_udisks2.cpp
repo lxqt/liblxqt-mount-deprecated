@@ -29,9 +29,10 @@
 #include <QtDBus>
 #include "rzmountproviders.h"
 
+namespace LxQt {
 
 UDisks2Provider::UDisks2Provider(QObject *parent):
-    RzMountProvider(parent)
+    MountProvider(parent)
 {
     QDBusConnection system = QDBusConnection::systemBus();
 
@@ -171,7 +172,7 @@ void UDisks2Provider::dbusDeviceChanged(const QDBusObjectPath &path)
 }
 
 UDisks2MountDevice::UDisks2MountDevice(const QDBusObjectPath &path):
-    RazorMountDevice(),
+    MountDevice(),
     mPath(path)
 {
 //    qDebug() << "UDisks2MountDevice::UDisks2MountDevice path" << mPath.path();
@@ -253,10 +254,10 @@ QStringList UDisks2MountDevice::mountPoints() const
     return points;
 }
 
-RazorMountDevice::MediaType UDisks2MountDevice::calcMediaType()
+MountDevice::MediaType UDisks2MountDevice::calcMediaType()
 {
     if (mDriveIface->property("Optical").toBool())
-        return RazorMountDevice::MediaTypeOptical;
+        return MountDevice::MediaTypeOptical;
 
     const QString media = mDriveIface->property("Media").toString();
     const QStringList mediaCompat = mDriveIface->property("MediaCompatibility").toStringList();
@@ -267,23 +268,23 @@ RazorMountDevice::MediaType UDisks2MountDevice::calcMediaType()
 //    {
         // TODO/FIXME: just guessing...
         if (mediaCompat.contains("floppy"))
-            return RazorMountDevice::MediaTypeFdd;
+            return MountDevice::MediaTypeFdd;
 
         if (idUsage == "filesystem")
-            return RazorMountDevice::MediaTypeDrive;
+            return MountDevice::MediaTypeDrive;
 
-        return RazorMountDevice::MediaTypeUnknown;
+        return MountDevice::MediaTypeUnknown;
 //    }
 
 //    if (mDbus->property("DeviceIsPartition").toBool())
 //    {
 //        if (idUsage == "filesystem")
-//            return RazorMountDevice::MediaTypePartition;
+//            return MountDevice::MediaTypePartition;
 
-//      return RazorMountDevice::MediaTypeUnknown;
+//      return MountDevice::MediaTypeUnknown;
 //    }
 
-    return RazorMountDevice::MediaTypeUnknown;
+    return MountDevice::MediaTypeUnknown;
 
 }
 
@@ -484,3 +485,5 @@ void UDisks2MountDevice::aboutToEject()
 {
     qDebug() << "UDisks2MountDevice::aboutToEject success";
 }
+
+} // namespace LxQt

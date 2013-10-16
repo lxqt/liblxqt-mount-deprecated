@@ -33,11 +33,12 @@
 #include <QtDBus/QDBusMessage>
 #include <QtCore/QDebug>
 
+namespace LxQt {
 
 /************************************************
 
  ************************************************/
-RzMountProvider::RzMountProvider(QObject *parent):
+MountProvider::MountProvider(QObject *parent):
     QObject(parent),
     mIsValid(false)
 {
@@ -48,7 +49,7 @@ RzMountProvider::RzMountProvider(QObject *parent):
 
  ************************************************/
 UDiskProvider::UDiskProvider(QObject *parent):
-    RzMountProvider(parent)
+    MountProvider(parent)
 {
     QDBusConnection system = QDBusConnection::systemBus();
 
@@ -210,7 +211,7 @@ void UDiskProvider::dbusDeviceChanged(const QDBusObjectPath &path)
 
  ************************************************/
 UDiskMountDevice::UDiskMountDevice(const QDBusObjectPath &path):
-    RazorMountDevice(),
+    MountDevice(),
     mUdiskPath(path.path())
 {
     mDbus = new QDBusInterface("org.freedesktop.UDisks",
@@ -259,10 +260,10 @@ bool UDiskMountDevice::update()
 /************************************************
 
  ************************************************/
-RazorMountDevice::MediaType UDiskMountDevice::calcMediaType()
+MountDevice::MediaType UDiskMountDevice::calcMediaType()
 {
     if (mDbus->property("DeviceIsOpticalDisc").toBool())
-        return RazorMountDevice::MediaTypeOptical;
+        return MountDevice::MediaTypeOptical;
 
     const QString media = mDbus->property("DriveMedia").toString();
     const QString mediaCompat = mDbus->property("DriveMediaCompatibility").toString();
@@ -271,23 +272,23 @@ RazorMountDevice::MediaType UDiskMountDevice::calcMediaType()
     if (mDbus->property("DeviceIsDrive").toBool())
     {
         if (mediaCompat == "floppy")
-            return RazorMountDevice::MediaTypeFdd;
+            return MountDevice::MediaTypeFdd;
 
         if (idUsage == "filesystem")
-            return RazorMountDevice::MediaTypeDrive;
+            return MountDevice::MediaTypeDrive;
 
-        return RazorMountDevice::MediaTypeUnknown;
+        return MountDevice::MediaTypeUnknown;
     }
 
     if (mDbus->property("DeviceIsPartition").toBool())
     {
         if (idUsage == "filesystem")
-            return RazorMountDevice::MediaTypePartition;
+            return MountDevice::MediaTypePartition;
 
-        return RazorMountDevice::MediaTypeUnknown;
+        return MountDevice::MediaTypeUnknown;
     }
 
-    return RazorMountDevice::MediaTypeUnknown;
+    return MountDevice::MediaTypeUnknown;
 }
 
 
@@ -505,3 +506,5 @@ bool UDiskMountDevice::eject()
                              SLOT(dbusSuccess(QDBusMessage)),
                              SLOT(dbusError(QDBusError, QDBusMessage)));
 }
+
+} // namespace LxQt

@@ -33,8 +33,11 @@
 #include <QtCore/QList>
 
 #define BOOL_SETTER(MEMBER) { bool res=(value != MEMBER); MEMBER = value; return res; }
-class RzMountProvider;
-class RazorMountDevice: public QObject
+
+namespace LxQt {
+
+class MountProvider;
+class MountDevice: public QObject
 {
     Q_OBJECT
 public:
@@ -75,7 +78,7 @@ signals:
      void unmounted();
 
 protected:
-    explicit RazorMountDevice();
+    explicit MountDevice();
 
     bool setDevFile(const QString &value)   BOOL_SETTER(mDevFile)
     bool setLabel(const QString &value)     BOOL_SETTER(mLabel)
@@ -109,39 +112,41 @@ protected:
     bool mIsMounted;
     bool mIsEjectable;
 private:
-    Q_DISABLE_COPY(RazorMountDevice)
+    Q_DISABLE_COPY(MountDevice)
 
 
 };
 
-typedef QList<RazorMountDevice*> RazorMountDeviceList;
+typedef QList<MountDevice*> MountDeviceList;
 
 
 
 
-class RazorMountManager : public QObject
+class MountManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit RazorMountManager(QObject *parent = 0);
-    virtual ~RazorMountManager();
+    explicit MountManager(QObject *parent = 0);
+    virtual ~MountManager();
 
-    const RazorMountDeviceList devices() const;
+    const MountDeviceList devices() const;
 
 public slots:
     void update();
 
 signals:
-    void deviceAdded(RazorMountDevice *device);
-    void deviceRemoved(RazorMountDevice *device);
-    void deviceChanged(RazorMountDevice *device);
+    void deviceAdded(MountDevice *device);
+    void deviceRemoved(MountDevice *device);
+    void deviceChanged(MountDevice *device);
 
 private:
-    RzMountProvider *mProvider;
+    MountProvider *mProvider;
 
 };
 
-QDebug operator<<(QDebug dbg, const RazorMountDevice& device);
-QDebug operator<<(QDebug dbg, const RazorMountDevice* const device);
+} // namespace LxQt
+
+QDebug operator<<(QDebug dbg, const LxQt::MountDevice& device);
+QDebug operator<<(QDebug dbg, const LxQt::MountDevice* const device);
 
 #endif // RAZORMOUNT_RAZORMOUNT_H

@@ -31,37 +31,39 @@
 #define RAZORMOUNT_RZMOUNTPROVIDERS_H
 
 #include <QObject>
-#include "razormount.h"
+#include "lxqtmount.h"
 #include <QtDBus/QDBusObjectPath>
 class QDBusInterface;
 class QDBusMessage;
 class QDBusError;
 
-class RzMountProvider : public QObject
+namespace LxQt {
+
+class MountProvider : public QObject
 {
     Q_OBJECT
 public:
-    explicit RzMountProvider(QObject *parent = 0);
-    virtual ~RzMountProvider() {}
+    explicit MountProvider(QObject *parent = 0);
+    virtual ~MountProvider() {}
 
-    const RazorMountDeviceList devices() const { return mDevices; }
+    const MountDeviceList devices() const { return mDevices; }
 
     bool isValid() const { return mIsValid; }
     virtual void update()=0;
 
 signals:
-    void deviceAdded(RazorMountDevice *device);
-    void deviceRemoved(RazorMountDevice *device);
-    void deviceChanged(RazorMountDevice *device);
+    void deviceAdded(MountDevice *device);
+    void deviceRemoved(MountDevice *device);
+    void deviceChanged(MountDevice *device);
 
 protected:
-    RazorMountDeviceList mDevices;
+    MountDeviceList mDevices;
     bool mIsValid;
 };
 
 
 
-class UDiskMountDevice: public RazorMountDevice
+class UDiskMountDevice: public MountDevice
 {
     Q_OBJECT
 public:
@@ -88,7 +90,7 @@ private slots:
 
 
 
-class UDiskProvider: public RzMountProvider
+class UDiskProvider: public MountProvider
 {
     Q_OBJECT
 public:
@@ -111,7 +113,7 @@ private:
 
 
 
-class UDisks2MountDevice: public RazorMountDevice
+class UDisks2MountDevice: public MountDevice
 {
     Q_OBJECT
 public:
@@ -144,7 +146,7 @@ private slots:
 
 
 
-class UDisks2Provider: public RzMountProvider
+class UDisks2Provider: public MountProvider
 {
     Q_OBJECT
 public:
@@ -166,5 +168,7 @@ private:
     void addDevice(UDisks2MountDevice *device);
     void delDevice(UDisks2MountDevice *device);
 };
+
+} // namespace LxQt
 
 #endif // RAZORMOUNT_RZMOUNTPROVIDERS_H
