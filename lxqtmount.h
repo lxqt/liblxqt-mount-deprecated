@@ -135,9 +135,9 @@ public slots:
     void update();
 
 signals:
-    void deviceAdded(MountDevice *device);
-    void deviceRemoved(MountDevice *device);
-    void deviceChanged(MountDevice *device);
+    void deviceAdded(LxQt::MountDevice *device);
+    void deviceRemoved(LxQt::MountDevice *device);
+    void deviceChanged(LxQt::MountDevice *device);
 
 private:
     MountProvider *mProvider;
