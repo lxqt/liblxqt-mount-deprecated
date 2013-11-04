@@ -9,6 +9,10 @@ set (MINOR_VERSION 5)
 set (PATCH_VERSION 0)
 set (LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
+# Set default installation paths
+set(LIB_INSTALL_DIR lib CACHE PATH "Installation directory for libraries")
+set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes")
+
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
@@ -61,14 +65,14 @@ set_target_properties(lxqtmount PROPERTIES
   SOVERSION ${LXQT_MAJOR_VERSION}
 )
 
-install(TARGETS lxqtmount DESTINATION lib${LIB_SUFFIX})
-install(FILES ${lxqtmount_HDRS} DESTINATION include/lxqtmount)
+install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR}${LIB_SUFFIX})
+install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/lxqtmount)
 
 include(create_pkgconfig_file)
 create_pkgconfig_file(lxqtmount "lxde-qt library for removable media/devices")
 
 # cmake config file
-set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/lxqtmount)
+set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/lxqtmount)
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/lxqtmount-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/lxqtmount-config.cmake
