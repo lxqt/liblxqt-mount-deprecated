@@ -1,7 +1,7 @@
 /* BEGIN_COMMON_COPYRIGHT_HEADER
  * (c)LGPL2+
  *
- * Razor - a lightweight, Qt based, desktop toolset
+ * LXDE-Qt - a lightweight, Qt based, desktop toolset
  * http://razor-qt.org
  *
  * Copyright: 2012 Razor team
@@ -27,8 +27,8 @@
  * END_COMMON_COPYRIGHT_HEADER */
 
 
-#ifndef RAZORMOUNT_RZMOUNTPROVIDERS_H
-#define RAZORMOUNT_RZMOUNTPROVIDERS_H
+#ifndef LXQTMOUNT_RZMOUNTPROVIDERS_H
+#define LXQTMOUNT_RZMOUNTPROVIDERS_H
 
 #include <QObject>
 #include "lxqtmount.h"
@@ -171,4 +171,4 @@ private:
 
 } // namespace LxQt
 
-#endif // RAZORMOUNT_RZMOUNTPROVIDERS_H
+#endif // LXQTMOUNT_RZMOUNTPROVIDERS_H

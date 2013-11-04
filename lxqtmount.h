@@ -1,7 +1,7 @@
 /* BEGIN_COMMON_COPYRIGHT_HEADER
  * (c)LGPL2+
  *
- * Razor - a lightweight, Qt based, desktop toolset
+ * LXDE-Qt - a lightweight, Qt based, desktop toolset
  * http://razor-qt.org
  *
  * Copyright: 2012 Razor team
@@ -26,8 +26,8 @@
  * END_COMMON_COPYRIGHT_HEADER */
 
 
-#ifndef RAZORMOUNT_RAZORMOUNT_H
-#define RAZORMOUNT_RAZORMOUNT_H
+#ifndef LXQTMOUNT_LXQTMOUNT_H
+#define LXQTMOUNT_LXQTMOUNT_H
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
@@ -149,4 +149,4 @@ private:
 QDebug operator<<(QDebug dbg, const LxQt::MountDevice& device);
 QDebug operator<<(QDebug dbg, const LxQt::MountDevice* const device);
 
-#endif // RAZORMOUNT_RAZORMOUNT_H
+#endif // LXQTMOUNT_LXQTMOUNT_H
