@@ -37,13 +37,19 @@ set(lxqtmount_MOCS
 
 QT4_WRAP_CPP(razourmount_MOCS ${lxqtmount_MOCS})
 
+# use gcc visibility feature to decrease unnecessary exported symbols
+if (CMAKE_COMPILER_IS_GNUCXX)
+  # set visibility to hidden to hide symbols, unlesss they're exporeted manually in the code
+  set(CMAKE_CXX_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions")
+endif()
+add_definitions(-DCOMPILE_LIBLXQT)
 
 add_library ( lxqtmount SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS} )
 
 target_link_libraries ( lxqtmount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
                                  ${QT_QTDBUS_LIBRARY}
-				 ${UDEV_LIBRARIES} 
-				 ${LXQT_LIBRARIES}
+				 # ${UDEV_LIBRARIES} 
+				 # ${LXQT_LIBRARIES}
                       )
 
 set_target_properties(lxqtmount PROPERTIES
