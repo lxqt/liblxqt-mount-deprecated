@@ -31,14 +31,21 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QList>
-#include <lxqt/lxqtglobals.h>
+
+#include <QtGlobal>
+
+#ifdef COMPILE_LIBLXQT_MOUNT
+#define LIBLXQT_MOUNT_API Q_DECL_EXPORT
+#else
+#define LIBLXQT_MOUNT_API Q_DECL_IMPORT
+#endif
 
 #define BOOL_SETTER(MEMBER) { bool res=(value != MEMBER); MEMBER = value; return res; }
 
 namespace LxQt {
 
 class MountProvider;
-class LXQT_API MountDevice: public QObject
+class LIBLXQT_MOUNT_API MountDevice: public QObject
 {
     Q_OBJECT
 public:
@@ -123,7 +130,7 @@ typedef QList<MountDevice*> MountDeviceList;
 
 
 
-class LXQT_API MountManager : public QObject
+class LIBLXQT_MOUNT_API MountManager : public QObject
 {
     Q_OBJECT
 public:
@@ -147,7 +154,7 @@ private:
 
 } // namespace LxQt
 
-LXQT_API QDebug operator<<(QDebug dbg, const LxQt::MountDevice& device);
-LXQT_API QDebug operator<<(QDebug dbg, const LxQt::MountDevice* const device);
+LIBLXQT_MOUNT_API QDebug operator<<(QDebug dbg, const LxQt::MountDevice& device);
+LIBLXQT_MOUNT_API QDebug operator<<(QDebug dbg, const LxQt::MountDevice* const device);
 
 #endif // LXQTMOUNT_LXQTMOUNT_H
