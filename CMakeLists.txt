@@ -10,7 +10,7 @@ set (PATCH_VERSION 0)
 set (LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 # Set default installation paths
-set(LIB_INSTALL_DIR lib CACHE PATH "Installation directory for libraries")
+set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
 set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes")
 
 find_package(Qt4 REQUIRED)
@@ -65,7 +65,7 @@ set_target_properties(lxqtmount PROPERTIES
   SOVERSION ${LXQT_MAJOR_VERSION}
 )
 
-install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR}${LIB_SUFFIX})
+install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR})
 install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/lxqtmount)
 
 include(create_pkgconfig_file)
