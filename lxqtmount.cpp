@@ -83,14 +83,14 @@ MountManager::MountManager(QObject *parent):
 
     update();
 
-    connect(mProvider, SIGNAL(deviceAdded(MountDevice*)),
-                 this, SIGNAL(deviceAdded(MountDevice*)));
+    connect(mProvider, SIGNAL(deviceAdded(LxQt::MountDevice*)),
+                 this, SIGNAL(deviceAdded(LxQt::MountDevice*)));
 
-    connect(mProvider, SIGNAL(deviceChanged(MountDevice*)),
-                 this, SIGNAL(deviceChanged(MountDevice*)));
+    connect(mProvider, SIGNAL(deviceChanged(LxQt::MountDevice*)),
+                 this, SIGNAL(deviceChanged(LxQt::MountDevice*)));
 
-    connect(mProvider, SIGNAL(deviceRemoved(MountDevice*)),
-                 this, SIGNAL(deviceRemoved(MountDevice*)));
+    connect(mProvider, SIGNAL(deviceRemoved(LxQt::MountDevice*)),
+                 this, SIGNAL(deviceRemoved(LxQt::MountDevice*)));
 }
 
 

@@ -52,9 +52,9 @@ public:
     virtual void update()=0;
 
 signals:
-    void deviceAdded(MountDevice *device);
-    void deviceRemoved(MountDevice *device);
-    void deviceChanged(MountDevice *device);
+    void deviceAdded(LxQt::MountDevice *device);
+    void deviceRemoved(LxQt::MountDevice *device);
+    void deviceChanged(LxQt::MountDevice *device);
 
 protected:
     MountDeviceList mDevices;
