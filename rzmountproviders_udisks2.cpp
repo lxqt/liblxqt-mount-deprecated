@@ -1,10 +1,11 @@
 /* BEGIN_COMMON_COPYRIGHT_HEADER
  * (c)LGPL2+
  *
- * LXDE-Qt - a lightweight, Qt based, desktop toolset
- * http://razor-qt.org
+ * LXQt - The Lightweight Desktop Environment
+ * http://lxqt.org
  *
  * Copyright: 2013 Razor team
+ *            2013-2014 LXQt team
  * Authors:
  *   Petr Vanek <petr@yarpen.cz>
  *   Alexander Sokoloff <sokoloff.a@gmail.com>
@@ -107,10 +108,10 @@ void UDisks2Provider::update()
         else
             dbusDeviceAdded(i, QVariantMap());
     }
-    
+
 //    qDebug() << mDevicesByPath;
 }
- 
+
 UDisks2MountDevice *UDisks2Provider::getDevice(const QDBusObjectPath &path) const
 {
     if (mDevicesByPath.contains(path.path()))
@@ -246,7 +247,7 @@ QStringList UDisks2MountDevice::mountPoints() const
     QList<QByteArray> l;
     foreach (QVariant arg, reply.arguments())
         arg.value<QDBusVariant>().variant().value<QDBusArgument>() >> l;
-    
+
     foreach (QByteArray p, l)
         points.append(p);
 

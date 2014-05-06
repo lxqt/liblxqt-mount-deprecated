@@ -4,10 +4,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 project(liblxqt-mount)
 
-set (MAJOR_VERSION 0)
-set (MINOR_VERSION 5)
-set (PATCH_VERSION 0)
-set (LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
+set(MAJOR_VERSION 0)
+set(MINOR_VERSION 5)
+set(PATCH_VERSION 0)
+set(LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 # Set default installation paths
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
@@ -22,10 +22,10 @@ find_package(LXQT REQUIRED)
 include(${LXQT_USE_FILE})
 
 include_directories (
-	${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
     ${QT_INCLUDES}
-	${X11_INCLUDE_DIR}
-	${LXQT_INCLUDE_DIRS}
+    ${X11_INCLUDE_DIR}
+    ${LXQT_INCLUDE_DIRS}
 )
 
 set(lxqtmount_HDRS
@@ -47,29 +47,28 @@ set(lxqtmount_MOCS
 QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
 
 # use gcc visibility feature to decrease unnecessary exported symbols
-if (CMAKE_COMPILER_IS_GNUCXX)
-  # set visibility to hidden to hide symbols, unlesss they're exporeted manually in the code
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wl,-no-undefined -Wall")
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # set visibility to hidden to hide symbols, unlesss they're exporeted manually in the code
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wl,-no-undefined -Wall")
 endif()
 add_definitions(-DCOMPILE_LIBLXQT_MOUNT)
 
-add_library ( lxqtmount SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS} )
+add_library(lxqtmount SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS})
 
-target_link_libraries ( lxqtmount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY}
-                                 ${QT_QTDBUS_LIBRARY}
-				 ${LXQT_LIBRARIES}
-                      )
+target_link_libraries(
+    lxqtmount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY} ${LXQT_LIBRARIES}
+)
 
 set_target_properties(lxqtmount PROPERTIES
-  VERSION ${LXQT_VERSION}
-  SOVERSION ${LXQT_MAJOR_VERSION}
+    VERSION ${LXQT_VERSION}
+    SOVERSION ${LXQT_MAJOR_VERSION}
 )
 
 install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR})
 install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/lxqtmount)
 
 include(create_pkgconfig_file)
-create_pkgconfig_file(lxqtmount "lxde-qt library for removable media/devices")
+create_pkgconfig_file(lxqtmount "LXQt library for removable media/devices")
 
 # cmake config file
 set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/lxqtmount)

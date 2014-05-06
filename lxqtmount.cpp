@@ -1,10 +1,11 @@
 /* BEGIN_COMMON_COPYRIGHT_HEADER
  * (c)LGPL2+
  *
- * LXDE-Qt - a lightweight, Qt based, desktop toolset
- * http://razor-qt.org
+ * LXQt - The Lightweight Desktop Environment
+ * http://lxqt.org
  *
  * Copyright: 2012 Razor team
+ *            2013-2014 LXQt team
  * Authors:
  *   Alexander Sokoloff <sokoloff.a@gmail.com>
  *
@@ -65,7 +66,7 @@ MountManager::MountManager(QObject *parent):
 {
     mProvider = new UDisks2Provider(this);
     if (!mProvider->isValid())
-    {              
+    {
         delete mProvider;
         mProvider = 0;
 
