@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 project(liblxqt-mount)
 
 set(MAJOR_VERSION 0)
-set(MINOR_VERSION 5)
+set(MINOR_VERSION 7)
 set(PATCH_VERSION 0)
 set(LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
@@ -17,9 +17,6 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 find_package(X11 REQUIRED QUIET)
-
-find_package(LXQT REQUIRED)
-include(${LXQT_USE_FILE})
 
 include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -59,8 +56,8 @@ target_link_libraries(
 )
 
 set_target_properties(lxqtmount PROPERTIES
-    VERSION ${LXQT_VERSION}
-    SOVERSION ${LXQT_MAJOR_VERSION}
+    VERSION ${LXQT_MOUNT_VERSION}
+    SOVERSION ${MAJOR_VERSION}
 )
 
 install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR})
