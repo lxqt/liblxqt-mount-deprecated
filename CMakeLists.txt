@@ -7,7 +7,7 @@ project(liblxqt-mount)
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 7)
 set(PATCH_VERSION 0)
-set(LXQT_MOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
+set(LXQTMOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
 # Set default installation paths
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
@@ -56,7 +56,7 @@ target_link_libraries(
 )
 
 set_target_properties(lxqtmount PROPERTIES
-    VERSION ${LXQT_MOUNT_VERSION}
+    VERSION ${LXQTMOUNT_VERSION}
     SOVERSION ${MAJOR_VERSION}
 )
 
