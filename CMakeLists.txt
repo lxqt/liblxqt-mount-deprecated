@@ -17,6 +17,7 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
+set(LXQTMOUNT_HEADER_NAMESPACE "LXQtMount")
 
 find_package(X11 REQUIRED QUIET)
 
@@ -42,6 +43,10 @@ set(lxqtmount_MOCS
     providers.h
 )
 
+set(LXQTMOUNT_PUBLIC_CLASSES
+    Mount
+    Providers
+)
 QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
 
 # use gcc visibility feature to decrease unnecessary exported symbols
@@ -61,9 +66,16 @@ set_target_properties(${LXQTMOUNT_LIBRARY_NAME} PROPERTIES
     VERSION ${LXQTMOUNT_VERSION}
     SOVERSION ${MAJOR_VERSION}
 )
+include(cmake/create_portable_headers.cmake)
+
+create_portable_headers(LXQTMOUNT_NAMESPACE_HEADERS
+    NAMESPACE "${LXQTMOUNT_HEADER_NAMESPACE}/"
+    FILENAMES ${LXQTMOUNT_PUBLIC_CLASSES}
+)
 
 install(TARGETS ${LXQTMOUNT_LIBRARY_NAME} DESTINATION ${LIB_INSTALL_DIR})
 install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME})
+install(FILES ${LXQTMOUNT_NAMESPACE_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME}/${LXQTMOUNT_HEADER_NAMESPACE})
 
 include(create_pkgconfig_file)
 create_pkgconfig_file(${LXQTMOUNT_LIBRARY_NAME} "LXQt library for removable media/devices")
