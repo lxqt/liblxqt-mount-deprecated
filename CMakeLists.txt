@@ -4,6 +4,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 project(liblxqt-mount)
 
+option(USE_QT5 "Build with Qt5." OFF)
+if (USE_QT5 AND USE_QT4)
+    message(FATAL "USE_QT4 and USE_QT5 both set. Please choose *only* one Qt version")
+elseif(USE_QT5)
+    set(USE_QT4 OFF)
+else()
+    set(USE_QT4 ON)
+endif()
+
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 7)
 set(PATCH_VERSION 0)
@@ -13,10 +22,22 @@ set(LXQTMOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
 set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes")
 
-find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
 
-set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
+if (USE_QT5)
+    cmake_minimum_required(VERSION 2.8.11)
+    find_package(Qt5Core REQUIRED QUIET)
+    find_package(Qt5Gui REQUIRED QUIET)
+    find_package(Qt5DBus REQUIRED QUIET)
+    find_package(Qt5LinguistTools REQUIRED QUIET)
+    set(LXQTMOUNT_LIBRARY_NAME "lxqtmount-qt5")
+    message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
+else()
+    find_package(Qt4 REQUIRED)
+    include(${QT_USE_FILE})
+    set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
+    message(STATUS "Building with Qt${QTVERSION}")
+endif()
+
 set(LXQTMOUNT_HEADER_NAMESPACE "LXQtMount")
 
 find_package(X11 REQUIRED QUIET)
@@ -26,6 +47,10 @@ include_directories (
     ${QT_INCLUDES}
     ${X11_INCLUDE_DIR}
 )
+
+if (USE_QT4)
+    include_directories(${QT_INCLUDES})
+endif()
 
 set(lxqtmount_HDRS
     mount.h
@@ -47,7 +72,12 @@ set(LXQTMOUNT_PUBLIC_CLASSES
     Mount
     Providers
 )
-QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
+
+if (USE_QT5)
+    QT5_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
+else()
+    QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
+endif()
 
 # use gcc visibility feature to decrease unnecessary exported symbols
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -58,9 +88,15 @@ add_definitions(-DCOMPILE_LIBLXQT_MOUNT)
 
 add_library(${LXQTMOUNT_LIBRARY_NAME} SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS})
 
-target_link_libraries(
-    ${LXQTMOUNT_LIBRARY_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY}
-)
+if (USE_QT5)
+    target_link_libraries (
+        ${LXQTMOUNT_LIBRARY_NAME} Qt5::Core Qt5::Gui Qt5::DBus
+    )
+else()
+    target_link_libraries (
+        ${LXQTMOUNT_LIBRARY_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY}
+    )
+endif()
 
 set_target_properties(${LXQTMOUNT_LIBRARY_NAME} PROPERTIES
     VERSION ${LXQTMOUNT_VERSION}
