@@ -28,7 +28,7 @@
  * END_COMMON_COPYRIGHT_HEADER */
 
 #include <QtDBus>
-#include "rzmountproviders.h"
+#include "providers.h"
 
 namespace LxQt {
 

@@ -27,7 +27,7 @@
  *
  * END_COMMON_COPYRIGHT_HEADER */
 
-#include "rzmountproviders.h"
+#include "providers.h"
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusArgument>
 #include <QtDBus/QDBusInterface>

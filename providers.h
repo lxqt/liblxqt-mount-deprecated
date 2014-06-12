@@ -32,7 +32,7 @@
 #define LXQTMOUNT_RZMOUNTPROVIDERS_H
 
 #include <QObject>
-#include "lxqtmount.h"
+#include "mount.h"
 #include <QtDBus/QDBusObjectPath>
 class QDBusInterface;
 class QDBusMessage;

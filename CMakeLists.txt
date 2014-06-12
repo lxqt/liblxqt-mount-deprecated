@@ -25,19 +25,19 @@ include_directories (
 )
 
 set(lxqtmount_HDRS
-    lxqtmount.h
-    rzmountproviders.h
+    mount.h
+    providers.h
 )
 
 set(lxqtmount_SRCS
-    lxqtmount.cpp
-    rzmountproviders.cpp
-    rzmountproviders_udisks2.cpp
+    mount.cpp
+    providers.cpp
+    providers_udisks2.cpp
 )
 
 set(lxqtmount_MOCS
-    lxqtmount.h
-    rzmountproviders.h
+    mount.h
+    providers.h
 )
 
 QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
