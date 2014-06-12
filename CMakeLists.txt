@@ -16,6 +16,8 @@ set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes"
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
+
 find_package(X11 REQUIRED QUIET)
 
 include_directories (
@@ -49,32 +51,32 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 add_definitions(-DCOMPILE_LIBLXQT_MOUNT)
 
-add_library(lxqtmount SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS})
+add_library(${LXQTMOUNT_LIBRARY_NAME} SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS})
 
 target_link_libraries(
-    lxqtmount ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY}
+    ${LXQTMOUNT_LIBRARY_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY}
 )
 
-set_target_properties(lxqtmount PROPERTIES
+set_target_properties(${LXQTMOUNT_LIBRARY_NAME} PROPERTIES
     VERSION ${LXQTMOUNT_VERSION}
     SOVERSION ${MAJOR_VERSION}
 )
 
-install(TARGETS lxqtmount DESTINATION ${LIB_INSTALL_DIR})
-install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/lxqtmount)
+install(TARGETS ${LXQTMOUNT_LIBRARY_NAME} DESTINATION ${LIB_INSTALL_DIR})
+install(FILES ${lxqtmount_HDRS} DESTINATION ${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME})
 
 include(create_pkgconfig_file)
-create_pkgconfig_file(lxqtmount "LXQt library for removable media/devices")
+create_pkgconfig_file(${LXQTMOUNT_LIBRARY_NAME} "LXQt library for removable media/devices")
 
 # cmake config file
-set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/lxqtmount)
+set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME})
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/lxqtmount-config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/lxqtmount-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake
     @ONLY
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lxqtmount-config.cmake DESTINATION share/cmake/lxqtmount)
-install(FILES cmake/lxqtmount_use.cmake DESTINATION share/cmake/lxqtmount)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
+install(FILES cmake/lxqtmount_use.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
 
 # building tarball with CPack -------------------------------------------------
 include (InstallRequiredSystemLibraries)
