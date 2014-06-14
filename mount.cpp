@@ -26,8 +26,8 @@
  *
  * END_COMMON_COPYRIGHT_HEADER */
 
-#include "lxqtmount.h"
-#include "rzmountproviders.h"
+#include "mount.h"
+#include "providers.h"
 #include <QtCore/QDebug>
 
 namespace LxQt {
