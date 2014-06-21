@@ -4,14 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 project(liblxqt-mount)
 
-option(USE_QT5 "Build with Qt5." OFF)
-if (USE_QT5 AND USE_QT4)
-    message(FATAL "USE_QT4 and USE_QT5 both set. Please choose *only* one Qt version")
-elseif(USE_QT5)
-    set(USE_QT4 OFF)
-else()
-    set(USE_QT4 ON)
-endif()
+option(USE_QT5 "Build with Qt5." $ENV{USE_QT5})
 
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 7)
@@ -48,7 +41,7 @@ include_directories (
     ${X11_INCLUDE_DIR}
 )
 
-if (USE_QT4)
+if (NOT USE_QT5)
     include_directories(${QT_INCLUDES})
 endif()
 
