@@ -6,15 +6,18 @@ project(liblxqt-mount)
 
 option(USE_QT5 "Build with Qt5." $ENV{USE_QT5})
 
-set(MAJOR_VERSION 0)
-set(MINOR_VERSION 7)
-set(PATCH_VERSION 0)
-set(LXQTMOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
-
 # Set default installation paths
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
 set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes")
 
+set(LXQTMOUNT_VERSION "${LXQT_MAJOR_VERSION}.${LXQT_MINOR_VERSION}.${LXQT_PATCH_VERSION}")
+
+
+# use gcc visibility feature to decrease unnecessary exported symbols
+if (CMAKE_COMPILER_IS_GNUCXX)
+    # set visibility to hidden to hide symbols, unlesss they're exporeted manually in the code
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden -fno-exceptions -Wall")
+endif()
 
 if (USE_QT5)
     cmake_minimum_required(VERSION 2.8.11)
@@ -22,14 +25,18 @@ if (USE_QT5)
     find_package(Qt5Gui REQUIRED QUIET)
     find_package(Qt5DBus REQUIRED QUIET)
     find_package(Qt5LinguistTools REQUIRED QUIET)
+    find_package(lxqt-qt5 REQUIRED QUIET)
     set(LXQTMOUNT_LIBRARY_NAME "lxqtmount-qt5")
     message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
 else()
     find_package(Qt4 REQUIRED)
     include(${QT_USE_FILE})
+    find_package(LXQT REQUIRED QUIET)
     set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
     message(STATUS "Building with Qt${QTVERSION}")
 endif()
+
+include(${LXQT_USE_FILE})
 
 set(LXQTMOUNT_HEADER_NAMESPACE "LXQtMount")
 
@@ -93,7 +100,7 @@ endif()
 
 set_target_properties(${LXQTMOUNT_LIBRARY_NAME} PROPERTIES
     VERSION ${LXQTMOUNT_VERSION}
-    SOVERSION ${MAJOR_VERSION}
+    SOVERSION ${LXQT_MAJOR_VERSION}
 )
 include(cmake/create_portable_headers.cmake)
 
@@ -121,9 +128,9 @@ install(FILES cmake/lxqtmount_use.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBR
 
 # building tarball with CPack -------------------------------------------------
 include (InstallRequiredSystemLibraries)
-set (CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
-set (CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
-set (CPACK_PACKAGE_VERSION_PATCH ${PATCH_VERSION})
+set (CPACK_PACKAGE_VERSION_MAJOR ${LXQT_MAJOR_VERSION})
+set (CPACK_PACKAGE_VERSION_MINOR ${LXQT_MINOR_VERSION})
+set (CPACK_PACKAGE_VERSION_PATCH ${LXQT_PATCH_VERSION})
 set (CPACK_GENERATOR TBZ2)
 set (CPACK_SOURCE_GENERATOR TBZ2)
 set (CPACK_SOURCE_IGNORE_FILES /build/;.gitignore;.*~;.git;.kdev4;temp)
