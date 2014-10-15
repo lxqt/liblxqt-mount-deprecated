@@ -7,7 +7,7 @@ project(liblxqt-mount)
 option(USE_QT5 "Build with Qt5." $ENV{USE_QT5})
 
 set(MAJOR_VERSION 0)
-set(MINOR_VERSION 7)
+set(MINOR_VERSION 8)
 set(PATCH_VERSION 0)
 set(LXQTMOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 
