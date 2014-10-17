@@ -1,10 +1,9 @@
-cmake_minimum_required(VERSION 2.6)
-# additional cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+cmake_minimum_required(VERSION 2.8.11)
 
 project(liblxqt-mount)
 
-option(USE_QT5 "Build with Qt5." $ENV{USE_QT5})
+# additional cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 8)
@@ -15,35 +14,19 @@ set(LXQTMOUNT_VERSION "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}")
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Installation directory for libraries")
 set(INCLUDE_INSTALL_DIR include CACHE PATH "Installation directory for includes")
 
-
-if (USE_QT5)
-    cmake_minimum_required(VERSION 2.8.11)
-    find_package(Qt5Core REQUIRED QUIET)
-    find_package(Qt5Gui REQUIRED QUIET)
-    find_package(Qt5DBus REQUIRED QUIET)
-    find_package(Qt5LinguistTools REQUIRED QUIET)
-    set(LXQTMOUNT_LIBRARY_NAME "lxqtmount-qt5")
-    message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
-else()
-    find_package(Qt4 REQUIRED)
-    include(${QT_USE_FILE})
-    set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
-    message(STATUS "Building with Qt${QTVERSION}")
-endif()
+find_package(Qt5Core REQUIRED QUIET)
+find_package(Qt5Gui REQUIRED QUIET)
+find_package(Qt5DBus REQUIRED QUIET)
+find_package(Qt5LinguistTools REQUIRED QUIET)
+set(LXQTMOUNT_LIBRARY_NAME "lxqtmount-qt5")
+message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
 
 set(LXQTMOUNT_HEADER_NAMESPACE "LXQtMount")
 
-find_package(X11 REQUIRED QUIET)
-
-include_directories (
-    ${CMAKE_CURRENT_BINARY_DIR}
+include_directories(
+    "${CMAKE_CURRENT_BINARY_DIR}"
     ${QT_INCLUDES}
-    ${X11_INCLUDE_DIR}
 )
-
-if (NOT USE_QT5)
-    include_directories(${QT_INCLUDES})
-endif()
 
 set(lxqtmount_HDRS
     mount.h
@@ -66,11 +49,7 @@ set(LXQTMOUNT_PUBLIC_CLASSES
     Providers
 )
 
-if (USE_QT5)
-    QT5_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
-else()
-    QT4_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
-endif()
+QT5_WRAP_CPP(lxqtmount_MOCS ${lxqtmount_MOCS})
 
 # use gcc visibility feature to decrease unnecessary exported symbols
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -81,15 +60,9 @@ add_definitions(-DCOMPILE_LIBLXQT_MOUNT)
 
 add_library(${LXQTMOUNT_LIBRARY_NAME} SHARED ${lxqtmount_SRCS} ${lxqtmount_MOCS})
 
-if (USE_QT5)
-    target_link_libraries (
-        ${LXQTMOUNT_LIBRARY_NAME} Qt5::Core Qt5::Gui Qt5::DBus
-    )
-else()
-    target_link_libraries (
-        ${LXQTMOUNT_LIBRARY_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDBUS_LIBRARY}
-    )
-endif()
+target_link_libraries(
+    ${LXQTMOUNT_LIBRARY_NAME} Qt5::Core Qt5::Gui Qt5::DBus
+)
 
 set_target_properties(${LXQTMOUNT_LIBRARY_NAME} PROPERTIES
     VERSION ${LXQTMOUNT_VERSION}
@@ -110,21 +83,21 @@ include(create_pkgconfig_file)
 create_pkgconfig_file(${LXQTMOUNT_LIBRARY_NAME} "LXQt library for removable media/devices")
 
 # cmake config file
-set(LXQTMOUNT_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME})
+set(LXQTMOUNT_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME}")
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/lxqtmount-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake
     @ONLY
 )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake" DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
 install(FILES cmake/lxqtmount_use.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
 
 # building tarball with CPack -------------------------------------------------
-include (InstallRequiredSystemLibraries)
-set (CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
-set (CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
-set (CPACK_PACKAGE_VERSION_PATCH ${PATCH_VERSION})
-set (CPACK_GENERATOR TBZ2)
-set (CPACK_SOURCE_GENERATOR TBZ2)
-set (CPACK_SOURCE_IGNORE_FILES /build/;.gitignore;.*~;.git;.kdev4;temp)
-include (CPack)
+include(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_VERSION_MAJOR ${MAJOR_VERSION})
+set(CPACK_PACKAGE_VERSION_MINOR ${MINOR_VERSION})
+set(CPACK_PACKAGE_VERSION_PATCH ${PATCH_VERSION})
+set(CPACK_GENERATOR TBZ2)
+set(CPACK_SOURCE_GENERATOR TBZ2)
+set(CPACK_SOURCE_IGNORE_FILES /build/;.gitignore;.*~;.git;.kdev4;temp)
+include(CPack)
