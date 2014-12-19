@@ -5,6 +5,9 @@ project(liblxqt-mount)
 # additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Standard directories for installation
+include(GNUInstallDirs)
+
 set(MAJOR_VERSION 0)
 set(MINOR_VERSION 8)
 set(PATCH_VERSION 0)
@@ -83,14 +86,15 @@ include(create_pkgconfig_file)
 create_pkgconfig_file(${LXQTMOUNT_LIBRARY_NAME} "LXQt library for removable media/devices")
 
 # cmake config file
-set(LXQTMOUNT_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME}")
+set(LXQTMOUNT_INCLUDE_DIR ${INCLUDE_INSTALL_DIR}/${LXQTMOUNT_LIBRARY_NAME})
+set(LXQT_INSTALL_CMAKE_DIR     ${CMAKE_INSTALL_FULL_LIBDIR}/cmake)
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/lxqtmount-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake
     @ONLY
 )
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake" DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
-install(FILES cmake/lxqtmount_use.cmake DESTINATION share/cmake/${LXQTMOUNT_LIBRARY_NAME})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${LXQTMOUNT_LIBRARY_NAME}-config.cmake DESTINATION ${LXQT_INSTALL_CMAKE_DIR}/${LXQTMOUNT_LIBRARY_NAME})
+install(FILES cmake/lxqtmount_use.cmake DESTINATION ${LXQT_INSTALL_CMAKE_DIR}/${LXQTMOUNT_LIBRARY_NAME})
 
 # building tarball with CPack -------------------------------------------------
 include(InstallRequiredSystemLibraries)
