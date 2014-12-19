@@ -21,10 +21,10 @@ find_package(Qt5Core REQUIRED QUIET)
 find_package(Qt5Gui REQUIRED QUIET)
 find_package(Qt5DBus REQUIRED QUIET)
 find_package(Qt5LinguistTools REQUIRED QUIET)
-set(LXQTMOUNT_LIBRARY_NAME "lxqtmount-qt5")
 message(STATUS "Building with Qt${Qt5Core_VERSION_STRING}")
 
 set(LXQTMOUNT_HEADER_NAMESPACE "LXQtMount")
+set(LXQTMOUNT_LIBRARY_NAME "lxqtmount")
 
 include_directories(
     "${CMAKE_CURRENT_BINARY_DIR}"
